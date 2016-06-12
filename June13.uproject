@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{EFD9CDF3-4BB6-07F2-A965-638ED3CC97AD}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "June13",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
