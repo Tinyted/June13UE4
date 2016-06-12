@@ -22,5 +22,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MapTravel)
 		TArray<FString> ValidMapModes;
 	
-	
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
 };

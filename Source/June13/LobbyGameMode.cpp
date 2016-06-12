@@ -13,3 +13,16 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Constructor for ALobbyGameMode"));
 	}
 }
+
+void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 
+{
+	Super::PostLogin(NewPlayer);
+
+	UE_LOG(YourLog, Warning, TEXT("Post Login")); //Window->Output Log to show log
+
+	TArray<class APlayerState*> playerArray = GameState->PlayerArray;
+	for (auto& Player : playerArray) 
+	{
+		UE_LOG(YourLog, Warning, TEXT("Player Name : %s"), *Player->PlayerName); //Window->Output Log to show log
+	}
+}
