@@ -8,6 +8,8 @@
 /**
  * 
  */
+
+
 UCLASS()
 class JUNE13_API ALobbyGameMode : public AGameMode
 {
@@ -17,10 +19,10 @@ class JUNE13_API ALobbyGameMode : public AGameMode
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MapTravel) //https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Reference/Properties/index.html
-		TArray<FString> ValidMapNames;
+	TArray<FString> ValidMapNames;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MapTravel)
-		TArray<FString> ValidMapModes;
+	TArray<FString> ValidMapModes;
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 

@@ -2,6 +2,7 @@
 
 #include "June13.h"
 #include "LobbyGameMode.h"
+#include "LobbyGameState.h"
 
 ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -12,6 +13,8 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Constructor for ALobbyGameMode"));
 	}
+
+	GameStateClass = ALobbyGameState::StaticClass();
 }
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 
