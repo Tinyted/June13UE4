@@ -3,6 +3,8 @@
 #include "June13.h"
 #include "LobbyGameMode.h"
 #include "LobbyGameState.h"
+#include "LobbyPlayerController.h"
+#include "LobbyPlayerState.h"
 
 ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -15,6 +17,8 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 	}
 
 	GameStateClass = ALobbyGameState::StaticClass();
+	PlayerControllerClass = ALobbyPlayerController::StaticClass();
+	PlayerStateClass = ALobbyPlayerState::StaticClass();
 }
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 

@@ -18,9 +18,10 @@ class JUNE13_API ALobbyGameMode : public AGameMode
 	ALobbyGameMode(const class FObjectInitializer& ObjectInitializer);
 
 public:
+	//REMOVE THIS
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MapTravel) //https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Reference/Properties/index.html
 	TArray<FString> ValidMapNames;
-
+	//REMOVE THIS, not needed, as using FMapInfo and stored in ALobbyGameState
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MapTravel)
 	TArray<FString> ValidMapModes;
 	
