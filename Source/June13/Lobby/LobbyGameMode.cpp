@@ -17,7 +17,7 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 	}
 
 	GameStateClass = ALobbyGameState::StaticClass();
-	PlayerControllerClass = ALobbyPlayerController::StaticClass();
+	//PlayerControllerClass = ALobbyPlayerController::StaticClass(); //Bug that subclasses of GameMode forgets the PlayerControllerClass?
 	PlayerStateClass = ALobbyPlayerState::StaticClass();
 
 }
@@ -25,29 +25,66 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 void ALobbyGameMode::InitGameState() 
 {
 	Super::InitGameState();
-	SetupMapInfo();
+	//SetupMapInfo();
 }
 
 void ALobbyGameMode::SetupMapInfo() 
 {
-	FMapInfo testMap;
-	testMap.MapName = FString(TEXT("Test Map Name"));
-	testMap.TeamSize = 2;
-	testMap.TeamCount = 2;
+	FMapInfo TestMap;
+	TestMap.MapName = FString(TEXT("Test Map Name"));
+	TestMap.TeamSize = 2;
+	TestMap.TeamCount = 2;
+	TestMap.MapURL = FString(TEXT("/Game/TestGame/TestMap"));
+
+	FGameModeInfo TestGameMode;
+	TestGameMode.GameModeName = FString(TEXT("Test Game Mode"));
+	TestGameMode.GameModeURL = FString(TEXT("/Game/TestGame/TestGameMode.TestGameMode_C"));
+
+	TestMap.SupportModes.Add(TestGameMode.GameModeName);
+
 
 	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
-	LobbyGameState->MapsAvailable.Add(testMap);
+	LobbyGameState->MapsAvailable.Add(TestMap);
+	LobbyGameState->GameModesAvailable.Add(TestGameMode);
 }
+
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 
 {
 	Super::PostLogin(NewPlayer);
 
-	UE_LOG(YourLog, Warning, TEXT("Post Login")); //Window->Output Log to show log
+	UE_LOG(YourLog, Warning, TEXT("ALobbyGameMode::Post Login")); //Window->Output Log to show log
 
 	TArray<class APlayerState*> playerArray = GameState->PlayerArray;
 	for (auto& Player : playerArray) 
 	{
 		UE_LOG(YourLog, Warning, TEXT("Player Name : %s"), *Player->PlayerName); //Window->Output Log to show log
 	}
+}
+
+void ALobbyGameMode::ServerTravel() 
+{
+	bUseSeamlessTravel = true;
+	UE_LOG(YourLog, Warning, TEXT("ALobbyGameMode::ServerTravel")); //Window->Output Log to show log
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("ALobbyGameMode::ServerTravel"));
+	}
+
+	//TODO get selected Map and GameMode from GameState, and travel to that instead
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	FMapInfo MapInfo = LobbyGameState->CurrentSelectedMap;
+	FGameModeInfo GameMode = LobbyGameState->CurrentSelectedMode;
+
+	FString MapURL = MapInfo.MapURL;
+	FString GameModeURL = GameMode.GameModeURL;
+
+	FString URL = MapURL + FString(TEXT("?game=")) + GameModeURL + FString(TEXT("?listen"));
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, URL);
+	}
+	GetWorld()->ServerTravel(URL);
+	//GetWorld()->ServerTravel(TEXT("/Game/TestGame/TestMap?game=/Game/TestGame/TestGameMode.TestGameMode_C?listen"));
 }

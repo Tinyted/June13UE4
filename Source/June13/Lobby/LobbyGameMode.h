@@ -23,4 +23,7 @@ public:
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	UFUNCTION(BlueprintCallable, Category = "MapTravel")
+	void ServerTravel();
+
 };

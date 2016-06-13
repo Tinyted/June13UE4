@@ -12,17 +12,38 @@ struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awe
 
 	//UPROPERTY for replication
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString MapName;
 
-	UPROPERTY(BlueprintReadOnly)
+	/* Example 
+		/Game/TestGame/TestMap
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString MapURL;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int32 TeamCount;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int32 TeamSize;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FString> SupportModes;
+};
+
+USTRUCT(BlueprintType)
+struct FGameModeInfo {
+	GENERATED_BODY() //For reflection
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString GameModeName;
+
+	/* Example
+	/Game/TestGame/TestGameMode.TestGameMode_C
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString GameModeURL;
+
 };
 
 /**
@@ -34,8 +55,16 @@ class JUNE13_API ALobbyGameState : public AGameState
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FMapInfo> MapsAvailable;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FGameModeInfo> GameModesAvailable;
+
+	UPROPERTY(BlueprintReadWrite)
+	FMapInfo CurrentSelectedMap;
+
+	UPROPERTY(BlueprintReadWrite)
+	FGameModeInfo CurrentSelectedMode;
 	
 };
