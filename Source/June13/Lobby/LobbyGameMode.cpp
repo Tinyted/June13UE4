@@ -17,7 +17,7 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 	}
 
 	GameStateClass = ALobbyGameState::StaticClass();
-	//PlayerControllerClass = ALobbyPlayerController::StaticClass(); //Bug that subclasses of GameMode forgets the PlayerControllerClass?
+	PlayerControllerClass = ALobbyPlayerController::StaticClass(); //Bug that subclasses of GameMode forgets the PlayerControllerClass?
 	PlayerStateClass = ALobbyPlayerState::StaticClass();
 
 }
