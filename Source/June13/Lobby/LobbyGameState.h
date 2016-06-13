@@ -5,23 +5,23 @@
 #include "GameFramework/GameState.h"
 #include "LobbyGameState.generated.h"
 
-USTRUCT() //necessary for engine to replicate, require F prefix as required by Engine
+USTRUCT(BlueprintType) //necessary for engine to replicate, require F prefix as required by Engine
 struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awesome
 {
 	GENERATED_BODY() //For reflection
 
 	//UPROPERTY for replication
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	FString MapName;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 TeamCount;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 TeamSize;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TArray<FString> SupportModes;
 };
 
@@ -34,6 +34,7 @@ class JUNE13_API ALobbyGameState : public AGameState
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(BlueprintReadOnly)
 	TArray<FMapInfo> MapsAvailable;
 
 	

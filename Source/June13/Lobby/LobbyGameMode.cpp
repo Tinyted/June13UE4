@@ -19,6 +19,24 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 	GameStateClass = ALobbyGameState::StaticClass();
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	PlayerStateClass = ALobbyPlayerState::StaticClass();
+
+}
+
+void ALobbyGameMode::InitGameState() 
+{
+	Super::InitGameState();
+	SetupMapInfo();
+}
+
+void ALobbyGameMode::SetupMapInfo() 
+{
+	FMapInfo testMap;
+	testMap.MapName = FString(TEXT("Test Map Name"));
+	testMap.TeamSize = 2;
+	testMap.TeamCount = 2;
+
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	LobbyGameState->MapsAvailable.Add(testMap);
 }
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 
