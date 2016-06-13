@@ -16,13 +16,13 @@ struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awe
 	FString MapName;
 
 	UPROPERTY()
-		int32 TeamCount;
+	int32 TeamCount;
 
 	UPROPERTY()
-		int32 TeamSize;
+	int32 TeamSize;
 
 	UPROPERTY()
-		TArray<FString> SupportModes;
+	TArray<FString> SupportModes;
 };
 
 /**

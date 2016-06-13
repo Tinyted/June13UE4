@@ -12,8 +12,12 @@ UCLASS()
 class JUNE13_API ALobbyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+	void BeginPlayingState() override;
 	
-	
-	
-	
+public:
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "BeginCalls")
+	void OnBeginPlayingState();
+
 };
