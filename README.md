@@ -7,8 +7,12 @@ Also faciltates multiple players, with player names, and different teams or spec
 Maps can only have certain game modes, and team numbers and size. (Should always support spectators)
 
 -----
-Progress and Roadmap as OF 731ec594c0810192715f9b18e5de85a7d36bcc20
+Progress and Roadmap as OF 3e0297436afd8dec3bffa4be672414e19fd16009
 -----
-1. Add GUI to show info Teams, and interactive elements to do things such as change team, map.
-2. Add Selected FMapInfo and make sure it's replicated to client for display purposes
-3. ?
+1. Make sure Selected FMapInfo and make sure it's replicated to client for display purposes
+2. Make sure Widgets are removed on servertravel
+3. Allow host to change map and modes
+4. Allow host to press start game, when everyone is readied
+5. Allow players to change teams
+6. Show teams/spectators based on selected map and mode.
+7. Change TeamCount and TeamSize info based on mode instead of map (Modes can be subclass in order to compensate for different map sizes maybe?)
