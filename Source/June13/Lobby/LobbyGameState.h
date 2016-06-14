@@ -5,6 +5,22 @@
 #include "GameFramework/GameState.h"
 #include "LobbyGameState.generated.h"
 
+USTRUCT(BlueprintType)
+struct FGameModeInfo 
+{
+	GENERATED_BODY() //For reflection
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString GameModeName;
+
+	/* Example
+	/Game/TestGame/TestGameMode.TestGameMode_C
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString GameModeURL;
+
+};
+
 USTRUCT(BlueprintType) //necessary for engine to replicate, require F prefix as required by Engine
 struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awesome
 {
@@ -28,22 +44,7 @@ struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awe
 	int32 TeamSize;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FString> SupportModes;
-};
-
-USTRUCT(BlueprintType)
-struct FGameModeInfo {
-	GENERATED_BODY() //For reflection
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString GameModeName;
-
-	/* Example
-	/Game/TestGame/TestGameMode.TestGameMode_C
-	*/
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString GameModeURL;
-
+	FGameModeInfo GameModeInfo;
 };
 
 /**
@@ -58,13 +59,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FMapInfo> MapsAvailable;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FGameModeInfo> GameModesAvailable;
-
 	UPROPERTY(BlueprintReadWrite)
-	FMapInfo CurrentSelectedMap;
-
-	UPROPERTY(BlueprintReadWrite)
-	FGameModeInfo CurrentSelectedMode;
-	
+	FMapInfo CurrentSelectedMap;	
 };

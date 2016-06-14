@@ -40,12 +40,10 @@ void ALobbyGameMode::SetupMapInfo()
 	TestGameMode.GameModeName = FString(TEXT("Test Game Mode"));
 	TestGameMode.GameModeURL = FString(TEXT("/Game/TestGame/TestGameMode.TestGameMode_C"));
 
-	TestMap.SupportModes.Add(TestGameMode.GameModeName);
-
+	TestMap.GameModeInfo = TestGameMode;
 
 	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
 	LobbyGameState->MapsAvailable.Add(TestMap);
-	LobbyGameState->GameModesAvailable.Add(TestGameMode);
 }
 
 
@@ -75,7 +73,7 @@ void ALobbyGameMode::ServerTravel()
 	//TODO get selected Map and GameMode from GameState, and travel to that instead
 	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
 	FMapInfo MapInfo = LobbyGameState->CurrentSelectedMap;
-	FGameModeInfo GameMode = LobbyGameState->CurrentSelectedMode;
+	FGameModeInfo GameMode = MapInfo.GameModeInfo;
 
 	FString MapURL = MapInfo.MapURL;
 	FString GameModeURL = GameMode.GameModeURL;
