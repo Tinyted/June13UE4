@@ -13,7 +13,7 @@ ALobbyGameMode::ALobbyGameMode(const class FObjectInitializer& ObjectInitializer
 
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Constructor for ALobbyGameMode"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Constructor for ALobbyGameMode"));
 	}
 
 	GameStateClass = ALobbyGameState::StaticClass();
@@ -31,6 +31,7 @@ void ALobbyGameMode::InitGameState()
 	{
 		UE_LOG(YourLog, Warning, TEXT("LobbyGameMode requesting LobbyGameState to setDefaultMap()")); //Window->Output Log to show log
 		LobbyGameState->setDefaultSelectedMap();
+		LobbyGameState->SpectatorTeamID = -1;
 	}
 	
 }
@@ -56,8 +57,6 @@ void ALobbyGameMode::SetupMapInfo()
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) 
 {
-	Super::PostLogin(NewPlayer);
-
 	UE_LOG(YourLog, Warning, TEXT("ALobbyGameMode::Post Login")); //Window->Output Log to show log
 
 	TArray<class APlayerState*> playerArray = GameState->PlayerArray;
@@ -65,6 +64,22 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		UE_LOG(YourLog, Warning, TEXT("Player Name : %s"), *Player->PlayerName); //Window->Output Log to show log
 	}
+
+	ALobbyPlayerState *LobbyPlayerState = Cast<ALobbyPlayerState>(NewPlayer->PlayerState);
+	if (LobbyPlayerState)
+	{
+		int32 spectator_teamid = -1;
+		ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+		if (LobbyGameState)
+		{
+			spectator_teamid = LobbyGameState->SpectatorTeamID;
+		}
+		LobbyPlayerState->SetTeamID(spectator_teamid);
+	}
+
+	//Do the stuff above then work on the Super::PostLogin which involves calling the blueprint Event
+	Super::PostLogin(NewPlayer);
+
 }
 
 void ALobbyGameMode::ServerTravel() 
@@ -74,7 +89,7 @@ void ALobbyGameMode::ServerTravel()
 
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("ALobbyGameMode::ServerTravel"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("ALobbyGameMode::ServerTravel ONSCREENMSG"));
 	}
 
 	//TODO get selected Map and GameMode from GameState, and travel to that instead

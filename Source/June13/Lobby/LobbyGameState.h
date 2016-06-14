@@ -59,9 +59,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FMapInfo> MapsAvailable;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Replicated)
 	FMapInfo CurrentSelectedMap;	
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void setDefaultSelectedMap();
+
+	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
+	int32 SpectatorTeamID;
 };

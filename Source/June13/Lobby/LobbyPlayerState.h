@@ -16,11 +16,17 @@ class JUNE13_API ALobbyPlayerState : public APlayerState, public ILobbyPlayerSta
 	
 public:
 
-	virtual int8 GetTeamID();
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	int32 GetTeamID();
+
 	void CopyProperties(APlayerState* PlayerState) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void SetTeamID(int32 TeamID);
+
 protected:
-	int8 mTeamID;
+	UPROPERTY(Replicated)
+	int32 mTeamID;
 	
 	
 };

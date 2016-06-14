@@ -2,11 +2,27 @@
 
 #include "June13.h"
 #include "LobbyPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
-int8 ALobbyPlayerState::GetTeamID()
+
+int32 ALobbyPlayerState::GetTeamID()
 {
 	return mTeamID;
 }
+
+void ALobbyPlayerState::SetTeamID(int32 TeamID)
+{
+	mTeamID = TeamID;
+}
+
+//Required for UPROPERTY replication
+void ALobbyPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALobbyPlayerState, mTeamID);
+}
+
 
 void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 {
