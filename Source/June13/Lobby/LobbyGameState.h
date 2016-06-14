@@ -61,4 +61,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	FMapInfo CurrentSelectedMap;	
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void setDefaultSelectedMap();
 };

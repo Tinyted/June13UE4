@@ -26,6 +26,13 @@ void ALobbyGameMode::InitGameState()
 {
 	Super::InitGameState();
 	//SetupMapInfo();
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	if (LobbyGameState)
+	{
+		UE_LOG(YourLog, Warning, TEXT("LobbyGameMode requesting LobbyGameState to setDefaultMap()")); //Window->Output Log to show log
+		LobbyGameState->setDefaultSelectedMap();
+	}
+	
 }
 
 void ALobbyGameMode::SetupMapInfo() 
