@@ -13,6 +13,5 @@ Progress and Roadmap as OF 82e2a2ae47af632db832a72456aa1045be55550a
 2. Make sure Widgets are removed on servertravel
 3. Allow host to change map and modes
 4. Allow host to press start game, when everyone is readied
-5. Allow players to change teams
+5. Allow players to change teams DONE
 6. Show teams/spectators based on selected map and mode. DONE
-7. Change TeamCount and TeamSize info based on mode instead of map (Modes can be subclass in order to compensate for different map sizes maybe?)
