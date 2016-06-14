@@ -24,9 +24,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	void SetTeamID(int32 TeamID);
 
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	bool GetReadyStatus();
+
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void ReadyPlayer(bool ready);
+
 protected:
 	UPROPERTY(Replicated)
 	int32 mTeamID;
+
+	//See https://docs.unrealengine.com/latest/INT/Gameplay/Networking/CharacterMovementComponent/ for possible client-side prediction (maybe can use simpler method)
+	UPROPERTY(Replicated) //Should consider having client see ready status first, before asking the server to replicate it to client, Since 'Replicated' implys Server-owned
+	bool mReady;
 	
 	
 };

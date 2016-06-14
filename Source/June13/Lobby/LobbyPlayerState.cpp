@@ -15,12 +15,23 @@ void ALobbyPlayerState::SetTeamID(int32 TeamID)
 	mTeamID = TeamID;
 }
 
+bool ALobbyPlayerState::GetReadyStatus()
+{
+	return mReady;
+}
+
+void ALobbyPlayerState::ReadyPlayer(bool ready)
+{
+	mReady = ready;
+}
+
 //Required for UPROPERTY replication
 void ALobbyPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ALobbyPlayerState, mTeamID);
+	DOREPLIFETIME(ALobbyPlayerState, mReady);
 }
 
 
