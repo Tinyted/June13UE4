@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/GameState.h"
+#include "LobbyPlayerState.h"
 #include "LobbyGameState.generated.h"
 
 USTRUCT(BlueprintType)
@@ -47,6 +48,22 @@ struct FMapInfo //https://wiki.unrealengine.com/Structs,_USTRUCTS(),_They're_Awe
 	FGameModeInfo GameModeInfo;
 };
 
+USTRUCT(BlueprintType)
+struct FTeamInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<ALobbyPlayerState *> PlayerStates;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int32 TeamSize;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int32 TeamID;
+
+};
+
 /**
  * 
  */
@@ -59,12 +76,27 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FMapInfo> MapsAvailable;
 
-	UPROPERTY(BlueprintReadWrite, Replicated)
-	FMapInfo CurrentSelectedMap;	
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void Server_SetCurrentSelectedMap(FMapInfo MapInfo);
+
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	FMapInfo GetCurrentSelectedMap();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void setDefaultSelectedMap();
 
 	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
 	int32 SpectatorTeamID;
+
+	//Should be updated whenever selected map is changed
+	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
+	TArray<FTeamInfo> TeamInfos;
+
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerState, int32 TeamID);
+
+private:
+	//use the getters and setters to manipulate for public/protected use
+	UPROPERTY(Replicated)
+	FMapInfo CurrentSelectedMap;
 };

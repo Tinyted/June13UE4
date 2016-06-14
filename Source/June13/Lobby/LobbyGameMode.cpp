@@ -94,7 +94,7 @@ void ALobbyGameMode::ServerTravel()
 
 	//TODO get selected Map and GameMode from GameState, and travel to that instead
 	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
-	FMapInfo MapInfo = LobbyGameState->CurrentSelectedMap;
+	FMapInfo MapInfo = LobbyGameState->GetCurrentSelectedMap(); //Don't need to check for server, since we are GameMode, and GameMode only exist on server
 	FGameModeInfo GameMode = MapInfo.GameModeInfo;
 
 	FString MapURL = MapInfo.MapURL;
