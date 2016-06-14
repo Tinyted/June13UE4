@@ -88,15 +88,23 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
 	int32 SpectatorTeamID;
 
-	//Should be updated whenever selected map is changed
-	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
-	TArray<FTeamInfo> TeamInfos;
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	TArray<FTeamInfo> GetTeamInfo();
 
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	void Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerState, int32 TeamID);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRep_TeamInfoChanged();
 
 private:
 	//use the getters and setters to manipulate for public/protected use
 	UPROPERTY(Replicated)
 	FMapInfo CurrentSelectedMap;
+
+	//Should be updated whenever selected map is changed
+	UPROPERTY(ReplicatedUsing = OnRep_TeamInfoChanged)
+	TArray<FTeamInfo> TeamInfos;
+
+
 };

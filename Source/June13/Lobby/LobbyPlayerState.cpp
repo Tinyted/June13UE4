@@ -2,6 +2,7 @@
 
 #include "June13.h"
 #include "LobbyPlayerState.h"
+#include "LobbyGameState.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -45,6 +46,17 @@ void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 	{
 		mTeamID = p->GetTeamID();
 	}
+}
+
+void ALobbyPlayerState::OnRep_TeamIDChanged_Implementation()
+{
+	AGameState *GameState = GetWorld()->GetGameState();
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	if (LobbyGameState)
+	{
+		LobbyGameState->OnRep_TeamInfoChanged();
+	}
+	
 }
 
 

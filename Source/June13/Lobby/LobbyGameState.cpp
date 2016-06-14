@@ -11,6 +11,7 @@ void ALobbyGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 
 	DOREPLIFETIME(ALobbyGameState, CurrentSelectedMap);
 	DOREPLIFETIME(ALobbyGameState, SpectatorTeamID);
+	DOREPLIFETIME(ALobbyGameState, TeamInfos);
 
 }
 
@@ -40,7 +41,7 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 		//Remove old team infos
 		for (auto& OldTeamInfo : TeamInfos)
 		{
-			for (auto& PlayerState : OldTeamInfo.PlayerStates)
+			for (auto& PlayerState : OldTeamInfo.PlayerStates) //Avoid any possible leaks?
 			{
 				OldTeamInfo.PlayerStates.Remove(PlayerState);
 			}
@@ -69,6 +70,11 @@ FMapInfo ALobbyGameState::GetCurrentSelectedMap()
 	return CurrentSelectedMap;	
 }
 
+TArray<FTeamInfo> ALobbyGameState::GetTeamInfo()
+{
+	return TeamInfos;
+}
+
 void ALobbyGameState::Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerState, int32 TeamID)
 {
 	UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID"));
@@ -87,18 +93,18 @@ void ALobbyGameState::Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerSt
 			{
 				if (TeamInfos.IsValidIndex(currentTeamID))
 				{
-					TeamInfos[currentTeamID].PlayerStates.Remove(PlayerState);
+					TeamInfos[currentTeamID].PlayerStates.Remove(PlayerState); //REPLICATED
 				}
 			}
 
 			//Set New Team ID on PlayerState
-			PlayerState->SetTeamID(TeamID);
+			PlayerState->SetTeamID(TeamID); //REPLICATED
 
 			if (TeamID != SpectatorTeamID)
 			{
 				UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID Adding to Team :%i"),TeamID);
 				//Add PlayerState to new Team
-				TeamInfos[TeamID].PlayerStates.Add(PlayerState);
+				TeamInfos[TeamID].PlayerStates.Add(PlayerState); //REPLICATED
 			}
 		}
 

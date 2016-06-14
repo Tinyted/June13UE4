@@ -30,8 +30,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	void ReadyPlayer(bool ready);
 
+	UFUNCTION(BlueprintNativeEvent)
+	void OnRep_TeamIDChanged();
+
 protected:
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_TeamIDChanged)
 	int32 mTeamID;
 
 	//See https://docs.unrealengine.com/latest/INT/Gameplay/Networking/CharacterMovementComponent/ for possible client-side prediction (maybe can use simpler method)

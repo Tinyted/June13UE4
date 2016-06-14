@@ -19,5 +19,4 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "BeginCalls")
 	void OnBeginPlayingState();
-
 };
