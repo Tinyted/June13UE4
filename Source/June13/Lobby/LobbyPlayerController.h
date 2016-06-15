@@ -19,4 +19,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "BeginCalls")
 	void OnBeginPlayingState();
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "Variable")
+	void Server_ReadyPlayer();
+
+
 };

@@ -2,6 +2,7 @@
 
 #include "June13.h"
 #include "LobbyPlayerController.h"
+#include "LobbyPlayerState.h"
 
 
 void ALobbyPlayerController::BeginPlayingState()
@@ -14,4 +15,25 @@ void ALobbyPlayerController::BeginPlayingState()
 	}
 
 	OnBeginPlayingState();
+}
+
+void ALobbyPlayerController::Server_ReadyPlayer_Implementation()
+{
+	//Double check it has authority
+	if (HasAuthority())
+	{
+		//Get PlayerState
+		ALobbyPlayerState *LobbyPlayerState = Cast<ALobbyPlayerState>(PlayerState);
+		if (LobbyPlayerState)
+		{
+			bool readyStatus = LobbyPlayerState->GetReadyStatus();
+			LobbyPlayerState->ReadyPlayer(!readyStatus);
+		}
+	}
+}
+
+//Nothing really to validate for a ready process
+bool ALobbyPlayerController::Server_ReadyPlayer_Validate()
+{
+	return true;
 }

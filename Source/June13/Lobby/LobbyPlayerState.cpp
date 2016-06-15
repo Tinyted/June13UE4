@@ -11,9 +11,30 @@ int32 ALobbyPlayerState::GetTeamID()
 	return mTeamID;
 }
 
-void ALobbyPlayerState::SetTeamID(int32 TeamID)
+void ALobbyPlayerState::SetTeamID_Implementation(int32 TeamID)
 {
-	mTeamID = TeamID;
+	if (HasAuthority())
+	{
+		mTeamID = TeamID;
+	}
+}
+
+bool ALobbyPlayerState::SetTeamID_Validate(int32 TeamID)
+{
+	//Might want to check if team id is valid
+	return true;
+}
+
+
+void ALobbyPlayerState::OnRep_TeamIDChanged_Implementation()
+{
+	AGameState *GameState = GetWorld()->GetGameState();
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	if (LobbyGameState)
+	{
+		LobbyGameState->OnRep_TeamInfoChanged();
+	}
+
 }
 
 bool ALobbyPlayerState::GetReadyStatus()
@@ -21,9 +42,29 @@ bool ALobbyPlayerState::GetReadyStatus()
 	return mReady;
 }
 
-void ALobbyPlayerState::ReadyPlayer(bool ready)
+void ALobbyPlayerState::ReadyPlayer_Implementation(bool ready)
 {
-	mReady = ready;
+	if (HasAuthority())
+	{
+		mReady = ready;
+	}
+
+}
+
+//No validation really done here, just return true always
+bool ALobbyPlayerState::ReadyPlayer_Validate(bool ready)
+{
+	return true;
+}
+
+void ALobbyPlayerState::OnRep_ReadyChanged_Implementation()
+{
+	AGameState *GameState = GetWorld()->GetGameState();
+	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+	if (LobbyGameState)
+	{
+		LobbyGameState->OnRep_ReadyChanged();
+	}
 }
 
 //Required for UPROPERTY replication
@@ -46,17 +87,6 @@ void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 	{
 		mTeamID = p->GetTeamID();
 	}
-}
-
-void ALobbyPlayerState::OnRep_TeamIDChanged_Implementation()
-{
-	AGameState *GameState = GetWorld()->GetGameState();
-	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
-	if (LobbyGameState)
-	{
-		LobbyGameState->OnRep_TeamInfoChanged();
-	}
-	
 }
 
 

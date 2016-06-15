@@ -97,6 +97,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnRep_TeamInfoChanged();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRep_ReadyChanged();
+
 private:
 	//use the getters and setters to manipulate for public/protected use
 	UPROPERTY(Replicated)

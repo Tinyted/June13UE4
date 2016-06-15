@@ -83,6 +83,12 @@ void ALobbyGameState::Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerSt
 	{
 		UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID has Authority"));
 
+		if (PlayerState->GetTeamID() == TeamID)
+		{
+		//Same team ID, no point in changing
+			return;
+		}
+
 		if (TeamInfos.IsValidIndex(TeamID) || TeamID == SpectatorTeamID)
 		{
 			UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID teamID is valid"));
@@ -106,6 +112,8 @@ void ALobbyGameState::Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerSt
 				//Add PlayerState to new Team
 				TeamInfos[TeamID].PlayerStates.Add(PlayerState); //REPLICATED
 			}
+
+			PlayerState->ReadyPlayer(false); //Will be replicated
 		}
 
 
