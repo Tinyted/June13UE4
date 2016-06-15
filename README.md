@@ -7,7 +7,7 @@ Also faciltates multiple players, with player names, and different teams or spec
 Maps can only have certain game modes, and team numbers and size. (Should always support spectators)
 
 -----
-Progress and Roadmap as OF 82e2a2ae47af632db832a72456aa1045be55550a
+Progress and Roadmap as OF f768d40bd02bb7b92a15e551e4d32685e6e43406
 -----
 1. Make sure Selected FMapInfo and make sure it's replicated to client for display purposes DONE
 2. Make sure Widgets are removed on servertravel DONE
