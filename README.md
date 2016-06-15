@@ -9,10 +9,10 @@ Maps can only have certain game modes, and team numbers and size. (Should always
 -----
 Features done
 -----
-Change Teams
-Ready System
-Start system, that requires everyone to be ready and does a 5 second timer to server travel
-Saving of custom TeamID data when server traveling
+1. Change Teams
+2. Ready System
+3. Start system, that requires everyone to be ready and does a 5 second timer to server travel
+4. Saving of custom TeamID data when server traveling
 
 -----
 TODOs
