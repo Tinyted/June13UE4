@@ -18,4 +18,5 @@ class ILobbyPlayerStateInterface
 
 public:
 	virtual int32 GetTeamID() = 0; //UE4 code standard advises against using just (int). GameModes should determine what each number represents
+	virtual void SetTeamID(int32 TeamID) = 0;
 };

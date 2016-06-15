@@ -71,11 +71,21 @@ void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 {
 	Super::CopyProperties(PlayerState);
 
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("ALobbyPlayerState::CopyProperties"));
+	}
+
 	//Check if PlayerState conforms to IPlayerStateInterface http://stackoverflow.com/questions/22609736/check-if-a-is-a-subclass-of-b
 	ILobbyPlayerStateInterface *p = Cast<ILobbyPlayerStateInterface>(PlayerState); //dynamic_cast doesnt work in UE4
 	if (p)
 	{
-		mTeamID = p->GetTeamID();
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("ALobbyPlayerState::CopyProperties p is true = %i -> %i"),p->GetTeamID(),mTeamID));
+		}
+
+		p->SetTeamID(mTeamID);
 	}
 }
 
