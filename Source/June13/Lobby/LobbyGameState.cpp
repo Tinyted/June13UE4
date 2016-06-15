@@ -10,7 +10,7 @@ void ALobbyGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ALobbyGameState, CurrentSelectedMap);
+	DOREPLIFETIME(ALobbyGameState, mCurrentSelectedMap);
 	DOREPLIFETIME(ALobbyGameState, SpectatorTeamID);
 	DOREPLIFETIME(ALobbyGameState, mTeamInfos);
 
@@ -24,7 +24,7 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 	{
 		UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::ServerSetCurrentSelectedMap isAuthority"));
 
-		CurrentSelectedMap = MapInfo;
+		mCurrentSelectedMap = MapInfo;
 
 		//Kick all players states into spectator mode
 		for (auto& PlayerState : PlayerArray)
@@ -66,7 +66,19 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 
 FMapInfo ALobbyGameState::GetCurrentSelectedMap()
 {
-	return CurrentSelectedMap;	
+	return mCurrentSelectedMap;	
+}
+
+void ALobbyGameState::SetDefaultSelectedMap_Implementation()
+{
+	if (MapsAvailable.Num() == 0)
+	{
+		return;
+	}
+	else 
+	{
+		mCurrentSelectedMap = MapsAvailable[0];
+	}
 }
 
 TArray<FTeamInfo> ALobbyGameState::GetTeamInfo()

@@ -81,8 +81,9 @@ public:
 	void Server_SetCurrentSelectedMap(FMapInfo MapInfo);
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	FMapInfo GetCurrentSelectedMap();
-	UFUNCTION(BlueprintImplementableEvent)
-	void setDefaultSelectedMap();
+	//GameMode calls this after initing the GameState
+	UFUNCTION(BlueprintNativeEvent)
+	void SetDefaultSelectedMap();
 
 	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
 	int32 SpectatorTeamID;
@@ -100,7 +101,7 @@ public:
 private:
 	//use the getters and setters to manipulate for public/protected use
 	UPROPERTY(Replicated)
-	FMapInfo CurrentSelectedMap;
+	FMapInfo mCurrentSelectedMap;
 
 	//Should be updated whenever selected map is changed
 	UPROPERTY(ReplicatedUsing = OnRep_TeamInfoChanged)
