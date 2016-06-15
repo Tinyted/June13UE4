@@ -2,6 +2,7 @@
 
 #include "June13.h"
 #include "LobbyGameState.h"
+#include "LobbyPlayerController.h"
 #include "Net/UnrealNetwork.h"
 
 //Required for UPROPERTY replication
@@ -11,7 +12,7 @@ void ALobbyGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 
 	DOREPLIFETIME(ALobbyGameState, CurrentSelectedMap);
 	DOREPLIFETIME(ALobbyGameState, SpectatorTeamID);
-	DOREPLIFETIME(ALobbyGameState, TeamInfos);
+	DOREPLIFETIME(ALobbyGameState, mTeamInfos);
 
 }
 
@@ -39,7 +40,7 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 			Update Team Info
 		 */
 		//Remove old team infos
-		for (auto& OldTeamInfo : TeamInfos)
+		for (auto& OldTeamInfo : mTeamInfos)
 		{
 			for (auto& PlayerState : OldTeamInfo.PlayerStates) //Avoid any possible leaks?
 			{
@@ -58,11 +59,9 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 		}
 
 		//Replace
-		TeamInfos = NewTeamInfos;
+		mTeamInfos = NewTeamInfos;
 
 	}
-
-
 }
 
 FMapInfo ALobbyGameState::GetCurrentSelectedMap()
@@ -72,50 +71,63 @@ FMapInfo ALobbyGameState::GetCurrentSelectedMap()
 
 TArray<FTeamInfo> ALobbyGameState::GetTeamInfo()
 {
-	return TeamInfos;
+	return mTeamInfos;
 }
 
-void ALobbyGameState::Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerState, int32 TeamID)
+void ALobbyGameState::AddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32 TeamID)
 {
-	UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID"));
-
-	if (HasAuthority())
+	if (TeamID != SpectatorTeamID && mTeamInfos.IsValidIndex(TeamID))
 	{
-		UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID has Authority"));
+		UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::AddPlayerStateToTeam Adding to Team :%i"), TeamID);
+		//Add PlayerState to new Team
+		mTeamInfos[TeamID].PlayerStates.Add(PlayerState); //REPLICATED
+	}
+}
 
-		if (PlayerState->GetTeamID() == TeamID)
+void ALobbyGameState::OnRep_TeamInfoChanged_Implementation()
+{
+	for (auto& PlayerState : PlayerArray)
+	{
+		AActor *Owner = PlayerState->GetOwner();
+		ALobbyPlayerController *PlayerController = Cast<ALobbyPlayerController>(Owner);
+		if (PlayerController)
 		{
-		//Same team ID, no point in changing
-			return;
+			PlayerController->Local_DataChanged();
 		}
+	}
+}
 
-		if (TeamInfos.IsValidIndex(TeamID) || TeamID == SpectatorTeamID)
+void ALobbyGameState::RemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState)
+{
+	int32 currentTeamID = PlayerState->GetTeamID();
+	if (currentTeamID != SpectatorTeamID)
+	{
+		if (mTeamInfos.IsValidIndex(currentTeamID))
 		{
-			UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID teamID is valid"));
-
-			//Remove Self from previous team id if its not spectator
-			int32 currentTeamID = PlayerState->GetTeamID();
-			if (currentTeamID != SpectatorTeamID)
-			{
-				if (TeamInfos.IsValidIndex(currentTeamID))
-				{
-					TeamInfos[currentTeamID].PlayerStates.Remove(PlayerState); //REPLICATED
-				}
-			}
-
-			//Set New Team ID on PlayerState
-			PlayerState->SetTeamID(TeamID); //REPLICATED
-
-			if (TeamID != SpectatorTeamID)
-			{
-				UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_ChangePlayerStateTeamID Adding to Team :%i"),TeamID);
-				//Add PlayerState to new Team
-				TeamInfos[TeamID].PlayerStates.Add(PlayerState); //REPLICATED
-			}
-
-			PlayerState->ReadyPlayer(false); //Will be replicated
+			mTeamInfos[currentTeamID].PlayerStates.Remove(PlayerState); //REPLICATED
 		}
+	}
+}
 
+void ALobbyGameState::AddPlayerState(APlayerState *PlayerState)
+{
+	Super::AddPlayerState(PlayerState);
+	InformLocalPlayerControllerDataChanged();
+}
 
+void ALobbyGameState::InformLocalPlayerControllerDataChanged()
+{
+	for (auto& PlayerState : PlayerArray)
+	{
+		AActor *Owner = PlayerState->GetOwner();
+		if (Owner)
+		{
+			ALobbyPlayerController *PlayerController = Cast<ALobbyPlayerController>(Owner);
+			if (PlayerController)
+			{
+				PlayerController->Local_DataChanged();
+			}
+		}
+		
 	}
 }

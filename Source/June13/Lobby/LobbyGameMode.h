@@ -23,6 +23,20 @@ public:
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	//Return false if can't start game, true if countdown starting
+	UFUNCTION(BlueprintCallable, Category = "Game Start")
+	bool ServerStartGame();
+
+	//To be moved to private
 	UFUNCTION(BlueprintCallable, Category = "MapTravel")
 	void ServerTravel();
+
+	void InformServerLocalPlayerControllersOfChanges();
+
+private:
+	FTimerHandle ServerTravelTimer;
+
+	int8 TravelTimerCountDown;
+
+	void ServerTravelCountDown();
 };

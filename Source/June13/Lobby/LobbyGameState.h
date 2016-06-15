@@ -76,29 +76,26 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FMapInfo> MapsAvailable;
 
+	//Need to have Server, reliable validation, but for now its fine because only gamemode is calling this
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	void Server_SetCurrentSelectedMap(FMapInfo MapInfo);
-
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	FMapInfo GetCurrentSelectedMap();
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void setDefaultSelectedMap();
 
 	UPROPERTY(BlueprintReadOnly, Category = "Variable", Replicated)
 	int32 SpectatorTeamID;
-
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	TArray<FTeamInfo> GetTeamInfo();
+	void RemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState);
+	void AddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32 TeamID);
 
-	UFUNCTION(BlueprintCallable, Category = "Variable")
-	void Server_ChangePlayerStateTeamID(ALobbyPlayerState *PlayerState, int32 TeamID);
-
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent)
 	void OnRep_TeamInfoChanged();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnRep_ReadyChanged();
+
+	void AddPlayerState(APlayerState* PlayerState) override;
 
 private:
 	//use the getters and setters to manipulate for public/protected use
@@ -107,7 +104,7 @@ private:
 
 	//Should be updated whenever selected map is changed
 	UPROPERTY(ReplicatedUsing = OnRep_TeamInfoChanged)
-	TArray<FTeamInfo> TeamInfos;
+	TArray<FTeamInfo> mTeamInfos;
 
-
+	void InformLocalPlayerControllerDataChanged();
 };

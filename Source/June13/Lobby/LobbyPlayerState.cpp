@@ -3,6 +3,7 @@
 #include "June13.h"
 #include "LobbyPlayerState.h"
 #include "LobbyGameState.h"
+#include "LobbyPlayerController.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -28,13 +29,7 @@ bool ALobbyPlayerState::SetTeamID_Validate(int32 TeamID)
 
 void ALobbyPlayerState::OnRep_TeamIDChanged_Implementation()
 {
-	AGameState *GameState = GetWorld()->GetGameState();
-	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
-	if (LobbyGameState)
-	{
-		LobbyGameState->OnRep_TeamInfoChanged();
-	}
-
+	InformLocalPlayerControllerDataChanged();
 }
 
 bool ALobbyPlayerState::GetReadyStatus()
@@ -59,12 +54,7 @@ bool ALobbyPlayerState::ReadyPlayer_Validate(bool ready)
 
 void ALobbyPlayerState::OnRep_ReadyChanged_Implementation()
 {
-	AGameState *GameState = GetWorld()->GetGameState();
-	ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
-	if (LobbyGameState)
-	{
-		LobbyGameState->OnRep_ReadyChanged();
-	}
+	InformLocalPlayerControllerDataChanged();
 }
 
 //Required for UPROPERTY replication
@@ -89,4 +79,23 @@ void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 	}
 }
 
+void ALobbyPlayerState::InformLocalPlayerControllerDataChanged()
+{
+	AGameState *GameState = GetWorld()->GetGameState();
+	if (!GameState)
+		return;
 
+	for (auto& PlayerState : GameState->PlayerArray)
+	{
+		AActor *Owner = PlayerState->GetOwner();
+		if (Owner)
+		{
+			ALobbyPlayerController *PlayerController = Cast<ALobbyPlayerController>(Owner);
+			if (PlayerController)
+			{
+				PlayerController->Local_DataChanged();
+			}
+		}
+		
+	}
+}

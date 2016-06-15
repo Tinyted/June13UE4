@@ -23,5 +23,22 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "Variable")
 	void Server_ReadyPlayer();
 
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "Variable")
+	void Server_ChangeTeam(int32 TeamID);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MultiCast_DataChanged();
+
+	//Used for local PlayerControllers to update their UI
+	UFUNCTION(BlueprintImplementableEvent, Category = "Data Changed")
+	void Local_DataChanged();
+
+	//Only server should call it, client calling will do nothing
+	UFUNCTION(BlueprintCallable, Category = "Game Start")
+	void Server_StartGame();
+
+private:
+	//Used to tell any player controllers that are local for the server that data has been changed
+	void ServerPlayerController_DataChanged();
 
 };

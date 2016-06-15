@@ -33,7 +33,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnRep_ReadyChanged();
 
-
 protected:
 	UPROPERTY(ReplicatedUsing = OnRep_TeamIDChanged)
 	int32 mTeamID;
@@ -42,5 +41,5 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_ReadyChanged) //Should consider having client see ready status first, before asking the server to replicate it to client, Since 'Replicated' implys Server-owned
 	bool mReady;
 	
-	
+	void InformLocalPlayerControllerDataChanged();
 };
