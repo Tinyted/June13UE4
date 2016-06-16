@@ -77,7 +77,7 @@ void ALobbyGameState::SetDefaultSelectedMap_Implementation()
 	}
 	else 
 	{
-		mCurrentSelectedMap = MapsAvailable[0];
+		Server_SetCurrentSelectedMap(MapsAvailable[0]);
 	}
 }
 
