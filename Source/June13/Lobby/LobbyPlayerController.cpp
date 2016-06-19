@@ -66,12 +66,12 @@ void ALobbyPlayerController::Server_ChangeTeam_Implementation(int32 TeamID)
 				UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_ChangeTeam teamID is valid"));
 
 				//Remove Self from previous team id
-				LobbyGameState->RemovePlayerStateFromTeam(LobbyPlayerState);
+				LobbyGameState->ServerRemovePlayerStateFromTeam(LobbyPlayerState);
 
 				//Set New Team ID on PlayerState
 				LobbyPlayerState->SetTeamID(TeamID); //REPLICATED
 
-				LobbyGameState->AddPlayerStateToTeam(LobbyPlayerState, TeamID); //REPLICATED
+				LobbyGameState->ServerAddPlayerStateToTeam(LobbyPlayerState, TeamID); //REPLICATED
 
 				LobbyPlayerState->ReadyPlayer(false); //Will be replicated
 

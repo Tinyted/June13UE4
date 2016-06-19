@@ -81,6 +81,9 @@ public:
 	void Server_SetCurrentSelectedMap(FMapInfo MapInfo); //TODO, change to server UFUNCTION
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	FMapInfo GetCurrentSelectedMap();
+	//UFUNCTION(BlueprintImplementable, Category = "Variable")
+	//void 
+
 	//GameMode calls this after initing the GameState
 	UFUNCTION(BlueprintNativeEvent)
 	void SetDefaultSelectedMap();
@@ -89,8 +92,10 @@ public:
 	int32 SpectatorTeamID;
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	TArray<FTeamInfo> GetTeamInfo();
-	void RemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState);
-	void AddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32 TeamID);
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState);
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerAddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32 TeamID);
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnRep_TeamInfoChanged();

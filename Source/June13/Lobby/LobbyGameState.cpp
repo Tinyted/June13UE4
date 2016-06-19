@@ -86,7 +86,7 @@ TArray<FTeamInfo> ALobbyGameState::GetTeamInfo()
 	return mTeamInfos;
 }
 
-void ALobbyGameState::AddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32 TeamID)
+void ALobbyGameState::ServerAddPlayerStateToTeam_Implementation(ALobbyPlayerState *PlayerState, int32 TeamID)
 {
 	if (TeamID != SpectatorTeamID && mTeamInfos.IsValidIndex(TeamID))
 	{
@@ -94,6 +94,11 @@ void ALobbyGameState::AddPlayerStateToTeam(ALobbyPlayerState *PlayerState, int32
 		//Add PlayerState to new Team
 		mTeamInfos[TeamID].PlayerStates.Add(PlayerState); //REPLICATED
 	}
+}
+
+bool ALobbyGameState::ServerAddPlayerStateToTeam_Validate(ALobbyPlayerState *PlayerState, int32 TeamID)
+{
+	return true;
 }
 
 void ALobbyGameState::OnRep_TeamInfoChanged_Implementation()
@@ -109,7 +114,7 @@ void ALobbyGameState::OnRep_TeamInfoChanged_Implementation()
 	}
 }
 
-void ALobbyGameState::RemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState)
+void ALobbyGameState::ServerRemovePlayerStateFromTeam_Implementation(ALobbyPlayerState *PlayerState)
 {
 	int32 currentTeamID = PlayerState->GetTeamID();
 	if (currentTeamID != SpectatorTeamID)
@@ -119,6 +124,11 @@ void ALobbyGameState::RemovePlayerStateFromTeam(ALobbyPlayerState *PlayerState)
 			mTeamInfos[currentTeamID].PlayerStates.Remove(PlayerState); //REPLICATED
 		}
 	}
+}
+
+bool ALobbyGameState::ServerRemovePlayerStateFromTeam_Validate(ALobbyPlayerState *PlayerState)
+{
+	return true;
 }
 
 void ALobbyGameState::AddPlayerState(APlayerState *PlayerState)
