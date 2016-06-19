@@ -25,6 +25,7 @@
 	Default implementation from AGameMode for ReadyToStartMatch() is a blueprint native event, thus _Implementation is required, and starts when there is (NumPlayers + NumBots > 0)
 	Default implementation from AGameMode for HandleMatchHasStarted() is to restart the player controllers if they have no pawn. 
 
+	When the conditions are met to start the game, the relevant code should call StartPlay(), which checks for MatchState to be WaitingToStart and true for ReadyToStartMatch()
  
  */
 
@@ -33,9 +34,20 @@ class JUNE13_API ATWGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
+public:
+
+	/* Data peristence from Lobby related */
+	//Handle Post SeamlessTravel
 	void PostSeamlessTravel() override;
 	
-	
+	/* Match State related*/
+	//Check if match is ready to start
+	UFUNCTION(BlueprintNativeEvent, Category = "Game")
+	bool ReadyToStartMatch();
+
+	//
+	void PostLogin(APlayerController* NewPlayer) override;
+
 	
 	
 };

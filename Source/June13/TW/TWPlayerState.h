@@ -18,4 +18,8 @@ public:
 	int32 GetTeamID();
 	void SetTeamID(int32 TeamID);
 	
+protected:
+
+	int32 mTeamID;
+
 };

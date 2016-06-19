@@ -5,12 +5,12 @@
 
 void ATWPlayerState::SetTeamID(int32 TeamID)
 {
-
+	mTeamID = TeamID;
 }
 
 int32 ATWPlayerState::GetTeamID()
 {
-	return 0;
+	return mTeamID;
 }
 
 

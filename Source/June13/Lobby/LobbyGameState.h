@@ -78,7 +78,7 @@ public:
 
 	//Need to have Server, reliable validation, but for now its fine because only gamemode is calling this
 	UFUNCTION(BlueprintCallable, Category = "Variable")
-	void Server_SetCurrentSelectedMap(FMapInfo MapInfo);
+	void Server_SetCurrentSelectedMap(FMapInfo MapInfo); //TODO, change to server UFUNCTION
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	FMapInfo GetCurrentSelectedMap();
 	//GameMode calls this after initing the GameState
