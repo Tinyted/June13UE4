@@ -16,6 +16,12 @@ void ATWGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutL
 
 void ATWGameState::ServerSetupTeam_Implementation()
 {
+	UE_LOG(YourLog, Warning, TEXT("ATWGameState::ServerSetupTeam_Implementation")); //Window->Output Log to show log
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("ATWGameState::ServerSetupTeam_Implementation"));
+	}
+
 	bool blueprint = SetupTeam();
 	if (blueprint)
 		return; //Done. If more stuff needs to be done in C++ AND in blueprint, considering subclassing TWGameState, and overriding this function and not calling super
@@ -35,7 +41,7 @@ bool ATWGameState::ServerSetupTeam_Validate()
 
 bool ATWGameState::SetupTeam_Implementation()
 {
-	return false; //Should always return false for C++, blueprint subclass should return true
+	return false; //Should always return false for C++, blueprint subclass should return 3
 }
 
 void ATWGameState::ServerSetupTeamInfo_Implementation()

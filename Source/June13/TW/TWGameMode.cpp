@@ -13,9 +13,11 @@ void ATWGameMode::PostSeamlessTravel()
 	//GameState should exist already, since it's created in PreInitializeComponents()
 	ATWGameState *TWGameState = Cast<ATWGameState>(GameState);
 
+
 	//Tell GameState to figure out what the teams are like. 
 	if (TWGameState)
 	{
+		TWGameState->ServerSetupTeam();
 		TWGameState->ServerSetupTeamInfo();
 	}
 }

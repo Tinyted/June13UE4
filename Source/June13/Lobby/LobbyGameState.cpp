@@ -10,10 +10,10 @@ void ALobbyGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(ALobbyGameState, MapsAvailable);
 	DOREPLIFETIME(ALobbyGameState, mCurrentSelectedMap);
 	DOREPLIFETIME(ALobbyGameState, SpectatorTeamID);
 	DOREPLIFETIME(ALobbyGameState, mTeamInfos);
-
 }
 
 void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
@@ -25,6 +25,8 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 		UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::ServerSetCurrentSelectedMap isAuthority"));
 
 		mCurrentSelectedMap = MapInfo;
+
+
 
 		//Kick all players states into spectator mode
 		for (auto& PlayerState : PlayerArray)
@@ -58,9 +60,20 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 			NewTeamInfos.Add(NewTeamInfo);
 		}
 
-		//Replace
+		//Replace reference, Does old one get garbage collected?
 		mTeamInfos = NewTeamInfos;
+	}
+}
 
+void ALobbyGameState::Server_SetCurrentSelectedMapWithIndex(int32 MapIndex)
+{
+	if (HasAuthority())
+	{
+		if (MapsAvailable.IsValidIndex(MapIndex))
+		{
+			UE_LOG(YourLog, Warning, TEXT("ALobbyGameState::Server_SetCurrentSelectedMapWithIndex %i"),MapIndex);
+			Server_SetCurrentSelectedMap(MapsAvailable[MapIndex]);
+		}
 	}
 }
 
@@ -103,15 +116,17 @@ bool ALobbyGameState::ServerAddPlayerStateToTeam_Validate(ALobbyPlayerState *Pla
 
 void ALobbyGameState::OnRep_TeamInfoChanged_Implementation()
 {
-	for (auto& PlayerState : PlayerArray)
-	{
-		AActor *Owner = PlayerState->GetOwner();
-		ALobbyPlayerController *PlayerController = Cast<ALobbyPlayerController>(Owner);
-		if (PlayerController)
-		{
-			PlayerController->Local_DataChanged();
-		}
-	}
+	InformLocalPlayerControllerDataChanged();
+}
+
+void ALobbyGameState::OnRep_MapAvailableChanged_Implementation()
+{
+	InformLocalPlayerControllerDataChanged();
+}
+
+void ALobbyGameState::OnRep_MapSelectedChanged_Implementation()
+{
+	InformLocalPlayerControllerDataChanged();
 }
 
 void ALobbyGameState::ServerRemovePlayerStateFromTeam_Implementation(ALobbyPlayerState *PlayerState)

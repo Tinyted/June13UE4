@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "LobbyGameState.h"
 #include "LobbyPlayerController.generated.h"
 
 /**
@@ -25,6 +26,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "Variable")
 	void Server_ChangeTeam(int32 TeamID);
+
+	//Only host should be calling this, client calling will do nothing
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void Server_ChangeMap(FMapInfo MapInfo);
+	//Only host should be calling this, client calling will do nothing
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void Server_ChangeMapWithIndex(int32 MapIndex); //Because it's UFUNCTION, can't use C++ overloading
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MultiCast_DataChanged();

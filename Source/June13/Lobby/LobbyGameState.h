@@ -73,16 +73,15 @@ class JUNE13_API ALobbyGameState : public AGameState
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing = OnRep_MapAvailableChanged)
 	TArray<FMapInfo> MapsAvailable;
 
-	//Need to have Server, reliable validation, but for now its fine because only gamemode is calling this
-	UFUNCTION(BlueprintCallable, Category = "Variable")
-	void Server_SetCurrentSelectedMap(FMapInfo MapInfo); //TODO, change to server UFUNCTION
+	//Server call only, client calling will do nothing
+	void Server_SetCurrentSelectedMap(FMapInfo MapInfo); 
+	void Server_SetCurrentSelectedMapWithIndex(int32 MapIndex);
+
 	UFUNCTION(BlueprintCallable, Category = "Variable")
 	FMapInfo GetCurrentSelectedMap();
-	//UFUNCTION(BlueprintImplementable, Category = "Variable")
-	//void 
 
 	//GameMode calls this after initing the GameState
 	UFUNCTION(BlueprintNativeEvent)
@@ -99,13 +98,16 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnRep_TeamInfoChanged();
-
+	UFUNCTION(BlueprintNativeEvent)
+	void OnRep_MapAvailableChanged();
+	UFUNCTION(BlueprintNativeEvent)
+	void OnRep_MapSelectedChanged();
 
 	void AddPlayerState(APlayerState* PlayerState) override;
 
 private:
 	//use the getters and setters to manipulate for public/protected use
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_MapSelectedChanged)
 	FMapInfo mCurrentSelectedMap;
 
 	//Should be updated whenever selected map is changed

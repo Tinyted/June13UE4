@@ -89,6 +89,43 @@ bool ALobbyPlayerController::Server_ChangeTeam_Validate(int32 TeamID)
 	return true;
 }
 
+void ALobbyPlayerController::Server_ChangeMap(FMapInfo MapInfo)
+{
+	if (HasAuthority())
+	{
+		AGameState *GameState = GetWorld()->GetGameState();
+		ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+		if (LobbyGameState)
+		{
+			UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_ChangeMap before")); //Window->Output Log to show log
+
+			LobbyGameState->Server_SetCurrentSelectedMap(MapInfo);
+			UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_ChangeMap after")); //Window->Output Log to show log
+
+			ServerPlayerController_DataChanged();
+		}
+	}
+}
+
+void ALobbyPlayerController::Server_ChangeMapWithIndex(int32 MapIndex)
+{
+	if (HasAuthority())
+	{
+		AGameState *GameState = GetWorld()->GetGameState();
+		ALobbyGameState *LobbyGameState = Cast<ALobbyGameState>(GameState);
+		if (LobbyGameState)
+		{
+			UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_ChangeMapWithIndex before")); //Window->Output Log to show log
+
+			LobbyGameState->Server_SetCurrentSelectedMapWithIndex(MapIndex);
+			UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_ChangeMapWithIndex after")); //Window->Output Log to show log
+
+			ServerPlayerController_DataChanged();
+		}
+	}
+}
+
+
 void ALobbyPlayerController::Server_StartGame()
 {
 	UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::Server_StartGame")); //Window->Output Log to show log
@@ -125,6 +162,8 @@ void ALobbyPlayerController::MultiCast_DataChanged_Implementation()
 
 void ALobbyPlayerController::ServerPlayerController_DataChanged()
 {
+	UE_LOG(YourLog, Warning, TEXT("ALobbyPlayerController::ServerPlayerController_DataChanged")); //Window->Output Log to show log
+
 	AGameMode* GameMode = GetWorld()->GetAuthGameMode();
 	ALobbyGameMode *LobbyGameMode = Cast<ALobbyGameMode>(GameMode);
 	if (LobbyGameMode)
