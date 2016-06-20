@@ -20,11 +20,11 @@ Features done
 3. Start system, that requires everyone to be ready and does a 5 second timer to server travel
 4. Saving of custom TeamID data when server traveling
 5. Change Maps
+6. Players are on the corresponding team/spectator after seamless travel
+7. Game only starts when all players have been connected.
 
 -----
 TODOs
 -----
-1. Make sure Players become spectators after server travel if they were on spectators team
-2. Make sure after server travel, game only starts when all non-spectators have been connected.
-3. Should investigate potential issue where ALobbyPlayerState and ALobbyGameState have separate places that indicate a player's current team selection. As that could create conflicts, due to lag or weird edge cases
-4. Unify LobbyGameState and TWGameState, since they have very similar stuff
+1. Should investigate potential issue where ALobbyPlayerState and ALobbyGameState have separate places that indicate a player's current team selection. As that could create conflicts, due to lag or weird edge cases
+2. Unify LobbyGameState and TWGameState, since they have very similar stuff
