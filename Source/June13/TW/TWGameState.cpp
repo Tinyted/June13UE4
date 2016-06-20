@@ -11,6 +11,8 @@ void ATWGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutL
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATWGameState, mTeamInfos);
+	DOREPLIFETIME(ATWGameState, mSpectatorInfos);
+
 
 }
 
@@ -38,6 +40,7 @@ bool ATWGameState::ServerSetupTeam_Validate()
 {
 	return true;
 }
+
 
 bool ATWGameState::SetupTeam_Implementation()
 {
@@ -75,6 +78,10 @@ void ATWGameState::ServerSetupTeamInfo_Implementation()
 			}
 			if (!foundTeamInfo)
 			{
+				//If not in any of the teams, put it on spectator
+				mSpectatorInfos.Add(TWPlayerState);
+				TWPlayerState->bIsSpectator = true; //Set it as spectator
+
 				UE_LOG(YourLog, Warning, TEXT("ERROR WARNING, TWGameState -> Can't find TeamID %i"),teamID); //Window->Output Log to show log
 				if (GEngine)
 				{

@@ -51,6 +51,11 @@ public:
 	void OnRep_TeamInfoChanged();
 	
 private:
+	//Used to store info regarding Playing Teams
 	UPROPERTY(ReplicatedUsing = OnRep_TeamInfoChanged)
 	TArray<FGameTeamInfo> mTeamInfos; //Can't use * since there's UPROPERTY, and * is not supported
+
+	//Used to store array of PlayerStates that are spectators
+	UPROPERTY(ReplicatedUsing = OnRep_TeamInfoChanged)
+	TArray<ATWPlayerState *> mSpectatorInfos;
 };
