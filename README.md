@@ -19,12 +19,12 @@ Features done
 2. Ready System
 3. Start system, that requires everyone to be ready and does a 5 second timer to server travel
 4. Saving of custom TeamID data when server traveling
+5. Change Maps
 
 -----
 TODOs
 -----
-1. Make sure Selected FMapInfo and make sure it's replicated to client for display purposes DONE (Need to double check with changing map feature)
-2. Allow host to change map and modes
-3. Make sure Players become spectators after server travel if they were on spectators team
-4. Make sure after server travel, game only starts when all non-spectators have been connected.
+1. Make sure Players become spectators after server travel if they were on spectators team
+2. Make sure after server travel, game only starts when all non-spectators have been connected.
 3. Should investigate potential issue where ALobbyPlayerState and ALobbyGameState have separate places that indicate a player's current team selection. As that could create conflicts, due to lag or weird edge cases
+4. Unify LobbyGameState and TWGameState, since they have very similar stuff
