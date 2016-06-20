@@ -42,6 +42,7 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 			Update Team Info
 		 */
 		//Remove old team infos
+		/*
 		for (auto& OldTeamInfo : mTeamInfos)
 		{
 			for (auto& PlayerState : OldTeamInfo.PlayerStates) //Avoid any possible leaks?
@@ -49,6 +50,7 @@ void ALobbyGameState::Server_SetCurrentSelectedMap(FMapInfo MapInfo)
 				OldTeamInfo.PlayerStates.Remove(PlayerState);
 			}
 		}
+		*/
 			
 		//Create new team infos
 		TArray<FTeamInfo> NewTeamInfos; 

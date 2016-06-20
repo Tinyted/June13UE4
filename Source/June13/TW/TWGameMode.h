@@ -36,6 +36,8 @@ class JUNE13_API ATWGameMode : public AGameMode
 
 public:
 
+	void StartPlay() override;
+
 	/* Data peristence from Lobby related */
 	//Handle Post SeamlessTravel
 	void PostSeamlessTravel() override;
@@ -47,7 +49,10 @@ public:
 
 	//
 	void PostLogin(APlayerController* NewPlayer) override;
+	
+	void HandleSeamlessTravelPlayer(AController*& C) override;
 
-	
-	
+private:
+
+	bool TeamSetupDone;
 };

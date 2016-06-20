@@ -17,6 +17,7 @@ class JUNE13_API ATWPlayerState : public APlayerState, public ILobbyPlayerStateI
 public: 
 	int32 GetTeamID();
 	void SetTeamID(int32 TeamID);
+	bool ClientReady;
 	
 protected:
 

@@ -36,16 +36,21 @@ class JUNE13_API ATWGameState : public AGameState
 public:
 
 	//Used to setup mTeamInfo's size, id name. Override this method for any c++ subclass, or for blueprints implement it via SetupTeam()
-	UFUNCTION(Server, Reliable, WithValidation, Category = "Variable")
+	UFUNCTION() //Not using Server specifier as we don't need the generated stuff, only usage is for Server's GameMode to call this 
 	void ServerSetupTeam();
+	//Used to add/remove PlayerState in mTeamInfo by looking through PlayerArray. Current Implementation only adds. Return true if successful
+	UFUNCTION()
+	bool ServerSetupTeamInfo();
 
 	//Should never be called directly, ServerSetupTeam() will call this at the end, ensuring it is done on the server. Return true if used.
 	UFUNCTION(BlueprintNativeEvent, Category = "Variable")
 	bool SetupTeam();
 
-	//Used to add/remove PlayerState in mTeamInfo
-	UFUNCTION(Server, Reliable, WithValidation, Category = "Variable")
-	void ServerSetupTeamInfo();
+	//Used for blueprint subclass to set mTeamInfos
+	UFUNCTION(BlueprintCallable, Category = "Variable")
+	void SetTeamInfos(TArray<FGameTeamInfo> TeamInfos);
+
+
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnRep_TeamInfoChanged();
